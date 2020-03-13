@@ -2128,16 +2128,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
 /* harmony import */ var lodash_defaults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/defaults */ "../node_modules/lodash/defaults.js");
 /* harmony import */ var lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_defaults__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./types */ "./types.ts");
-/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
-/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./util */ "./util.ts");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util */ "./util.ts");
 
 
 
@@ -2168,7 +2166,7 @@ function (_super) {
       url: this.url,
       method: 'POST',
       data: {
-        "query": data
+        query: data
       }
     };
 
@@ -2213,8 +2211,12 @@ function (_super) {
         , Promise.all(options.targets.map(function (target) {
           var query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(target, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]);
           var payload = query.queryText;
-          payload = payload.replace(/\$timeFrom/g, options.range.from.valueOf().toString());
-          payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
+
+          if (options.range) {
+            payload = payload.replace(/\$timeFrom/g, options.range.from.valueOf().toString());
+            payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
+          }
+
           payload = _this.templateSrv.replace(payload, options.scopedVars); //console.log(payload);
 
           return _this.postQuery(query, payload);
@@ -2226,14 +2228,14 @@ function (_super) {
           var _loop_1 = function _loop_1(res) {
             var e_2, _a, e_3, _b;
 
-            var data = res.query.dataPath.split(".").reduce(function (d, p) {
+            var data = res.query.dataPath.split('.').reduce(function (d, p) {
               return d[p];
             }, res.results.data);
             var docs = [];
             var fields = [];
 
             var pushDoc = function pushDoc(doc) {
-              var d = Object(_util__WEBPACK_IMPORTED_MODULE_7__["flatten"])(doc);
+              var d = Object(_util__WEBPACK_IMPORTED_MODULE_6__["flatten"])(doc);
 
               for (var p in d) {
                 if (fields.indexOf(p) === -1) {
@@ -2252,19 +2254,19 @@ function (_super) {
               pushDoc(data);
             }
 
-            var df = new _grafana_data__WEBPACK_IMPORTED_MODULE_4__["MutableDataFrame"]({
+            var df = new _grafana_data__WEBPACK_IMPORTED_MODULE_2__["MutableDataFrame"]({
               fields: []
             });
 
             try {
               for (var fields_1 = (e_2 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(fields)), fields_1_1 = fields_1.next(); !fields_1_1.done; fields_1_1 = fields_1.next()) {
                 var f = fields_1_1.value;
-                var t = _grafana_data__WEBPACK_IMPORTED_MODULE_4__["FieldType"].string;
+                var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
 
-                if (f === "Time") {
-                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_4__["FieldType"].time;
-                } else if (lodash__WEBPACK_IMPORTED_MODULE_5___default.a.isNumber(docs[0][f])) {
-                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_4__["FieldType"].number;
+                if (f === 'Time') {
+                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].time;
+                } else if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
+                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
                 }
 
                 df.addField({
@@ -2291,7 +2293,7 @@ function (_super) {
                 var doc = docs_1_1.value;
 
                 if (doc.Time) {
-                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_6___default()(doc.Time);
+                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc.Time);
                 }
 
                 df.add(doc);
@@ -2362,7 +2364,7 @@ function (_super) {
   };
 
   return DataSource;
-}(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["DataSourceApi"]);
+}(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["DataSourceApi"]);
 
 
 
@@ -2460,8 +2462,8 @@ function (_super) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugin", function() { return plugin; });
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _DataSource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataSource */ "./DataSource.ts");
 /* harmony import */ var _ConfigEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ConfigEditor */ "./ConfigEditor.tsx");
 /* harmony import */ var _QueryEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./QueryEditor */ "./QueryEditor.tsx");
@@ -2469,7 +2471,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var plugin = new _grafana_ui__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setQueryEditor(_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
+var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setQueryEditor(_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
 
 /***/ }),
 
