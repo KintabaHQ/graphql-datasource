@@ -2217,11 +2217,12 @@ function (_super) {
             payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
           }
 
-          payload = _this.templateSrv.replace(payload, options.scopedVars); //console.log(payload);
-
+          payload = _this.templateSrv.replace(payload, options.scopedVars);
           return _this.postQuery(query, payload);
         })).then(function (results) {
           var e_1, _a;
+
+          var _b;
 
           var dataFrame = [];
 
@@ -2292,8 +2293,12 @@ function (_super) {
               for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
                 var doc = docs_1_1.value;
 
+                if ((_b = doc) === null || _b === void 0 ? void 0 : _b['node.Time']) {
+                  doc['node.Time'] = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc['node.Time']);
+                }
+
                 if (doc.Time) {
-                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc.Time);
+                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default()(doc.Time);
                 }
 
                 df.add(doc);

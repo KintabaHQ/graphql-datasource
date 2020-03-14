@@ -68,7 +68,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
         }
         payload = this.templateSrv.replace(payload, options.scopedVars);
-        //console.log(payload);
         return this.postQuery(query, payload);
       })
     ).then((results: any) => {
@@ -114,8 +113,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           };
         }
         for (const doc of docs) {
+          if (doc?.['node.Time']) {
+            doc['node.Time'] = moment.unix(doc['node.Time']);
+          }
           if (doc.Time) {
-            doc.Time = moment.unix(doc.Time);
+            doc.Time = moment(doc.Time);
           }
           df.add(doc);
         }
