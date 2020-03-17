@@ -118,8 +118,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         const query = defaults(target, defaultQuery);
         let payload = query.queryText;
         if (options.range) {
-          payload = payload.replace(/\$timeFrom/g, options.range.from.valueOf().toString());
-          payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
+          payload = payload.replace(/\$startTime/g, options.range.from.unix().toString());
+          payload = payload.replace(/\$endTime/g, options.range.to.unix().toString());
         }
         payload = this.templateSrv.replace(payload, options.scopedVars);
         return await this.postQuery(query, payload);
