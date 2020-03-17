@@ -2136,6 +2136,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "moment");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util */ "./util.ts");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -2199,6 +2201,67 @@ function (_super) {
 
       throw err;
     });
+  }; // @ts-ignore
+
+
+  DataSource.prototype.flattenResults = function (results) {
+    var _this = this;
+
+    if (Array.isArray(results)) {
+      // @ts-ignore
+      var flat = results.map(function (r) {
+        return _this.flattenResults(r);
+      });
+
+      if (flat.length === 1) {
+        return flat[0];
+      }
+
+      if (Array.isArray(flat[0])) {
+        return flat.flat();
+      }
+
+      return flat;
+    }
+
+    if (_typeof(results) !== 'object') {
+      return results;
+    }
+
+    var flattenedNonArray = {};
+    var arrayKey = null;
+
+    for (var key in results) {
+      var value = results[key];
+
+      if (Array.isArray(value)) {
+        if (arrayKey != null) {
+          console.error('Got multiple arrays in the object.');
+        }
+
+        arrayKey = key;
+      } else {
+        var flattenedValue = this.flattenResults(value); // @ts-ignore
+
+        flattenedNonArray[key] = flattenedValue;
+      }
+    }
+
+    if (!arrayKey) {
+      return flattenedNonArray;
+    } // @ts-ignore
+
+
+    var flattenedArray = this.flattenResults(results[arrayKey]); // @ts-ignore
+
+    return flattenedArray.map(function (aVal) {
+      if (_typeof(aVal) === 'object') {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, flattenedNonArray), aVal);
+      } // @ts-ignore
+
+
+      flattenedNonArray[arrayKey] = aVal;
+    });
   };
 
   DataSource.prototype.query = function (options) {
@@ -2227,9 +2290,12 @@ function (_super) {
           var _loop_1 = function _loop_1(res) {
             var e_2, _a, e_3, _b;
 
-            var data = res.query.dataPath.split('.').reduce(function (d, p) {
+            var raw = res.query.dataPath.split('.').reduce(function (d, p) {
               return d[p];
             }, res.results.data);
+
+            var data = _this.flattenResults(raw);
+
             var docs = [];
             var fields = [];
 

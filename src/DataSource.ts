@@ -58,6 +58,60 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       });
   }
 
+  // @ts-ignore
+  flattenResults(results: any) {
+    if (Array.isArray(results)) {
+      // @ts-ignore
+      const flat = results.map(r => this.flattenResults(r));
+      if (flat.length === 1) {
+        return flat[0];
+      }
+      if (Array.isArray(flat[0])) {
+        return flat.flat();
+      }
+      return flat;
+    }
+
+    if (typeof results !== 'object') {
+      return results;
+    }
+
+    const flattenedNonArray = {};
+    let arrayKey: string | null = null;
+
+    for (const key in results) {
+      const value = results[key];
+      if (Array.isArray(value)) {
+        if (arrayKey != null) {
+          console.error('Got multiple arrays in the object.');
+        }
+        arrayKey = key;
+      } else {
+        const flattenedValue = this.flattenResults(value);
+        // @ts-ignore
+        flattenedNonArray[key] = flattenedValue;
+      }
+    }
+
+    if (!arrayKey) {
+      return flattenedNonArray;
+    }
+
+    // @ts-ignore
+    const flattenedArray = this.flattenResults(results[arrayKey]);
+    // @ts-ignore
+    return flattenedArray.map(aVal => {
+      if (typeof aVal === 'object') {
+        return {
+          ...flattenedNonArray,
+          ...aVal,
+        };
+      }
+      // @ts-ignore
+      flattenedNonArray[arrayKey] = aVal;
+    });
+  }
+
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     return Promise.all(
       options.targets.map(target => {
@@ -73,9 +127,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     ).then((results: any) => {
       const dataFrame: DataFrame[] = [];
       for (const res of results) {
-        const data = res.query.dataPath.split('.').reduce((d: any, p: any) => {
+        const raw = res.query.dataPath.split('.').reduce((d: any, p: any) => {
           return d[p];
         }, res.results.data);
+        const data = this.flattenResults(raw);
+
         const docs: any[] = [];
         const fields: any[] = [];
         const pushDoc = (doc: object) => {
@@ -94,6 +150,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           }
           docs.push(finalDoc);
         };
+
         if (Array.isArray(data)) {
           for (let i = 0; i < data.length; i++) {
             pushDoc(data[i]);
