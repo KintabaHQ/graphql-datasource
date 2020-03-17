@@ -5,7 +5,6 @@ import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceS
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 import { MutableDataFrame, FieldType, DataFrame } from '@grafana/data';
 import _ from 'lodash';
-import moment from 'moment';
 import { flatten } from './util';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
@@ -134,21 +133,17 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
         const docs: any[] = [];
         const fields: any[] = [];
-        const pushDoc = (doc: object) => {
-          const d = flatten(doc) as object;
-          const finalDoc = {};
-          Object.entries(d).forEach(([key, value]) => {
-            const moddedKey = key.startsWith('node.') ? key.replace('node.', '') : key;
-            // @ts-ignore
-            finalDoc[moddedKey] = value;
-          });
 
-          for (const p in finalDoc) {
+        const pushDoc = (doc: object) => {
+          // @ts-ignore
+          const d = doc?.['node'] ? flatten(doc['node']) : flatten(doc);
+
+          for (const p in d) {
             if (fields.indexOf(p) === -1) {
               fields.push(p);
             }
           }
-          docs.push(finalDoc);
+          docs.push(d);
         };
 
         if (Array.isArray(data)) {
@@ -164,9 +159,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         });
         for (const f of fields) {
           let t: FieldType = FieldType.string;
-          if (f === 'Time') {
-            t = FieldType.time;
-          } else if (_.isNumber(docs[0][f])) {
+          if (_.isNumber(docs[0][f])) {
             t = FieldType.number;
           }
           df.addField({
@@ -177,13 +170,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           };
         }
         for (const doc of docs) {
-          if (doc.Time) {
-            doc.Time = moment.unix(doc.Time);
+          if (doc?.Time) {
+            doc.Time = doc.Time * 1000;
           }
           df.add(doc);
         }
         dataFrame.push(df);
       }
+
       return { data: dataFrame };
     });
   }

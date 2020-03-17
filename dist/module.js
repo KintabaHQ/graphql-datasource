@@ -1,4 +1,4 @@
-define(["@grafana/data","@grafana/ui","lodash","moment","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_moment__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@grafana/data","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -2133,11 +2133,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./types */ "./types.ts");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util */ "./util.ts");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./util.ts");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 
 
@@ -2285,6 +2282,8 @@ function (_super) {
         })).then(function (results) {
           var e_1, _a;
 
+          var _b;
+
           var dataFrame = [];
 
           var _loop_1 = function _loop_1(res) {
@@ -2300,25 +2299,18 @@ function (_super) {
             var fields = [];
 
             var pushDoc = function pushDoc(doc) {
-              var d = Object(_util__WEBPACK_IMPORTED_MODULE_6__["flatten"])(doc);
-              var finalDoc = {};
-              Object.entries(d).forEach(function (_a) {
-                var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
-                    key = _b[0],
-                    value = _b[1];
+              var _a; // @ts-ignore
 
-                var moddedKey = key.startsWith('node.') ? key.replace('node.', '') : key; // @ts-ignore
 
-                finalDoc[moddedKey] = value;
-              });
+              var d = ((_a = doc) === null || _a === void 0 ? void 0 : _a['node']) ? Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc['node']) : Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc);
 
-              for (var p in finalDoc) {
+              for (var p in d) {
                 if (fields.indexOf(p) === -1) {
                   fields.push(p);
                 }
               }
 
-              docs.push(finalDoc);
+              docs.push(d);
             };
 
             if (Array.isArray(data)) {
@@ -2338,9 +2330,7 @@ function (_super) {
                 var f = fields_1_1.value;
                 var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
 
-                if (f === 'Time') {
-                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].time;
-                } else if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
+                if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
                   t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
                 }
 
@@ -2367,8 +2357,8 @@ function (_super) {
               for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
                 var doc = docs_1_1.value;
 
-                if (doc.Time) {
-                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc.Time);
+                if ((_b = doc) === null || _b === void 0 ? void 0 : _b.Time) {
+                  doc.Time = doc.Time * 1000;
                 }
 
                 df.add(doc);
@@ -2631,17 +2621,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
-
-/***/ }),
-
-/***/ "moment":
-/*!*************************!*\
-  !*** external "moment" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_moment__;
 
 /***/ }),
 
