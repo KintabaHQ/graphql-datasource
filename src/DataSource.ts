@@ -1,6 +1,8 @@
 import defaults from 'lodash/defaults';
 
 import { DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings } from '@grafana/data';
+import { BackendSrv } from '@grafana/runtime';
+import { TemplateSrv } from 'types-grafana/app/features/templating/template_srv';
 
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 import { MutableDataFrame, FieldType, DataFrame } from '@grafana/data';
@@ -12,14 +14,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   withCredentials: boolean | undefined;
   url: string | undefined;
 
-  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>, private backendSrv: any, private templateSrv: any) {
+  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>, private backendSrv: BackendSrv, private templateSrv: TemplateSrv) {
     super(instanceSettings);
     this.basicAuth = instanceSettings.basicAuth;
     this.withCredentials = instanceSettings.withCredentials;
     this.url = instanceSettings.url;
   }
 
-  private request(data: string) {
+  private async request(data: string) {
     const options: any = {
       url: this.url,
       method: 'POST',
@@ -37,24 +39,23 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       };
     }
 
-    return this.backendSrv.datasourceRequest(options);
+    return await this.backendSrv.datasourceRequest(options);
   }
 
-  private postQuery(query: Partial<MyQuery>, payload: string) {
-    return this.request(payload)
-      .then((results: any) => {
-        return { query, results };
-      })
-      .catch((err: any) => {
-        if (err.data && err.data.error) {
-          throw {
-            message: 'GraphQL error: ' + err.data.error.reason,
-            error: err.data.error,
-          };
-        }
+  private async postQuery(query: Partial<MyQuery>, payload: string) {
+    try {
+      const results = await this.request(payload);
+      return { query, results };
+    } catch (err) {
+      if (err.data && err.data.error) {
+        throw {
+          message: 'GraphQL error: ' + err.data.error.reason,
+          error: err.data.error,
+        };
+      }
 
-        throw err;
-      });
+      throw err;
+    }
   }
 
   // @ts-ignore
@@ -112,8 +113,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    return Promise.all(
-      options.targets.map(target => {
+    const results = await Promise.all(
+      options.targets.map(async target => {
         const query = defaults(target, defaultQuery);
         let payload = query.queryText;
         if (options.range) {
@@ -121,94 +122,85 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
         }
         payload = this.templateSrv.replace(payload, options.scopedVars);
-        return this.postQuery(query, payload);
+        return await this.postQuery(query, payload);
       })
-    ).then((results: any) => {
-      const dataFrame: DataFrame[] = [];
-      for (const res of results) {
-        const raw = res.query.dataPath.split('.').reduce((d: any, p: any) => {
-          return d[p];
-        }, res.results.data);
-        const data = this.flattenResults(raw);
+    );
 
-        const docs: any[] = [];
-        const fields: any[] = [];
+    const dataFrame: DataFrame[] = [];
+    for (const res of results) {
+      const raw = res.query.dataPath?.split('.').reduce((d, p) => {
+        return d[p];
+      }, res.results.data);
+      const data = this.flattenResults(raw);
 
-        const pushDoc = (doc: object) => {
-          // @ts-ignore
-          const d = doc?.['node'] ? flatten(doc['node']) : flatten(doc);
+      const docs: any[] = [];
+      const fields: any[] = [];
 
-          for (const p in d) {
-            if (fields.indexOf(p) === -1) {
-              fields.push(p);
-            }
+      const pushDoc = (doc: object) => {
+        // @ts-ignore
+        const d = doc?.['node'] ? flatten(doc['node']) : flatten(doc);
+
+        for (const p in d) {
+          if (fields.indexOf(p) === -1) {
+            fields.push(p);
           }
-          docs.push(d);
-        };
-
-        if (Array.isArray(data)) {
-          for (let i = 0; i < data.length; i++) {
-            pushDoc(data[i]);
-          }
-        } else {
-          pushDoc(data);
         }
+        docs.push(d);
+      };
 
-        const df = new MutableDataFrame({
-          fields: [],
-        });
-        for (const f of fields) {
-          let t: FieldType = FieldType.string;
-          if (_.isNumber(docs[0][f])) {
-            t = FieldType.number;
-          }
-          df.addField({
-            name: f,
-            type: t,
-          }).parse = (v: any) => {
-            return v || '';
-          };
+      if (Array.isArray(data)) {
+        for (let i = 0; i < data.length; i++) {
+          pushDoc(data[i]);
         }
-        for (const doc of docs) {
-          if (doc?.Time) {
-            doc.Time = doc.Time * 1000;
-          }
-          df.add(doc);
-        }
-        dataFrame.push(df);
+      } else {
+        pushDoc(data);
       }
 
-      return { data: dataFrame };
-    });
+      const df = new MutableDataFrame({
+        fields: [],
+      });
+      for (const f of fields) {
+        let t: FieldType = FieldType.string;
+        if (_.isNumber(docs[0][f])) {
+          t = FieldType.number;
+        }
+        df.addField({
+          name: f,
+          type: t,
+        }).parse = (v: any) => {
+          return v || '';
+        };
+      }
+      for (const doc of docs) {
+        if (doc?.Time) {
+          doc.Time = doc.Time * 1000;
+        }
+        df.add(doc);
+      }
+      dataFrame.push(df);
+    }
+
+    return { data: dataFrame };
   }
 
-  testDatasource() {
+  async testDatasource() {
     const q = `{
       __schema{
         queryType{name}
       }
     }`;
-    return this.postQuery(defaultQuery, q).then(
-      (res: any) => {
-        if (res.errors) {
-          console.log(res.errors);
-          return {
-            status: 'error',
-            message: 'GraphQL Error: ' + res.errors[0].message,
-          };
-        }
-        return {
-          status: 'success',
-          message: 'Success',
-        };
-      },
-      (err: any) => {
-        console.log(err);
-        return {
-          status: 'error',
-          message: 'HTTP Response ' + err.status + ': ' + err.statusText,
-        };
-      }
-    );
+    try {
+      await this.postQuery(defaultQuery, q);
+      return {
+        status: 'success',
+        message: 'Success',
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        status: 'error',
+        message: 'HTTP Response ' + err.status + ': ' + err.statusText,
+      };
+    }
   }
 }

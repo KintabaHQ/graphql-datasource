@@ -2161,42 +2161,81 @@ function (_super) {
   }
 
   DataSource.prototype.request = function (data) {
-    var options = {
-      url: this.url,
-      method: 'POST',
-      data: {
-        query: data
-      }
-    };
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var options;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            options = {
+              url: this.url,
+              method: 'POST',
+              data: {
+                query: data
+              }
+            };
 
-    if (this.basicAuth || this.withCredentials) {
-      options.withCredentials = true;
-    }
+            if (this.basicAuth || this.withCredentials) {
+              options.withCredentials = true;
+            }
 
-    if (this.basicAuth) {
-      options.headers = {
-        Authorization: this.basicAuth
-      };
-    }
+            if (this.basicAuth) {
+              options.headers = {
+                Authorization: this.basicAuth
+              };
+            }
 
-    return this.backendSrv.datasourceRequest(options);
+            return [4
+            /*yield*/
+            , this.backendSrv.datasourceRequest(options)];
+
+          case 1:
+            return [2
+            /*return*/
+            , _a.sent()];
+        }
+      });
+    });
   };
 
   DataSource.prototype.postQuery = function (query, payload) {
-    return this.request(payload).then(function (results) {
-      return {
-        query: query,
-        results: results
-      };
-    })["catch"](function (err) {
-      if (err.data && err.data.error) {
-        throw {
-          message: 'GraphQL error: ' + err.data.error.reason,
-          error: err.data.error
-        };
-      }
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var results, err_1;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            _a.trys.push([0, 2,, 3]);
 
-      throw err;
+            return [4
+            /*yield*/
+            , this.request(payload)];
+
+          case 1:
+            results = _a.sent();
+            return [2
+            /*return*/
+            , {
+              query: query,
+              results: results
+            }];
+
+          case 2:
+            err_1 = _a.sent();
+
+            if (err_1.data && err_1.data.error) {
+              throw {
+                message: 'GraphQL error: ' + err_1.data.error.reason,
+                error: err_1.data.error
+              };
+            }
+
+            throw err_1;
+
+          case 3:
+            return [2
+            /*return*/
+            ];
+        }
+      });
     });
   }; // @ts-ignore
 
@@ -2262,169 +2301,214 @@ function (_super) {
   };
 
   DataSource.prototype.query = function (options) {
+    var _a, _b;
+
     return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var results, dataFrame, _loop_1, this_1, results_1, results_1_1, res;
+
+      var e_1, _c;
+
       var _this = this;
 
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
-        return [2
-        /*return*/
-        , Promise.all(options.targets.map(function (target) {
-          var query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(target, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]);
-          var payload = query.queryText;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_d) {
+        switch (_d.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , Promise.all(options.targets.map(function (target) {
+              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
+                var query, payload;
+                return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+                  switch (_a.label) {
+                    case 0:
+                      query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(target, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]);
+                      payload = query.queryText;
 
-          if (options.range) {
-            payload = payload.replace(/\$timeFrom/g, options.range.from.valueOf().toString());
-            payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
-          }
+                      if (options.range) {
+                        payload = payload.replace(/\$timeFrom/g, options.range.from.valueOf().toString());
+                        payload = payload.replace(/\$timeTo/g, options.range.to.valueOf().toString());
+                      }
 
-          payload = _this.templateSrv.replace(payload, options.scopedVars);
-          return _this.postQuery(query, payload);
-        })).then(function (results) {
-          var e_1, _a;
+                      payload = this.templateSrv.replace(payload, options.scopedVars);
+                      return [4
+                      /*yield*/
+                      , this.postQuery(query, payload)];
 
-          var _b;
+                    case 1:
+                      return [2
+                      /*return*/
+                      , _a.sent()];
+                  }
+                });
+              });
+            }))];
 
-          var dataFrame = [];
+          case 1:
+            results = _d.sent();
+            dataFrame = [];
 
-          var _loop_1 = function _loop_1(res) {
-            var e_2, _a, e_3, _b;
+            _loop_1 = function _loop_1(res) {
+              var e_2, _a, e_3, _b;
 
-            var raw = res.query.dataPath.split('.').reduce(function (d, p) {
-              return d[p];
-            }, res.results.data);
+              var raw = (_a = res.query.dataPath) === null || _a === void 0 ? void 0 : _a.split('.').reduce(function (d, p) {
+                return d[p];
+              }, res.results.data);
+              var data = this_1.flattenResults(raw);
+              var docs = [];
+              var fields = [];
 
-            var data = _this.flattenResults(raw);
-
-            var docs = [];
-            var fields = [];
-
-            var pushDoc = function pushDoc(doc) {
-              var _a; // @ts-ignore
+              var pushDoc = function pushDoc(doc) {
+                var _a; // @ts-ignore
 
 
-              var d = ((_a = doc) === null || _a === void 0 ? void 0 : _a['node']) ? Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc['node']) : Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc);
+                var d = ((_a = doc) === null || _a === void 0 ? void 0 : _a['node']) ? Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc['node']) : Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc);
 
-              for (var p in d) {
-                if (fields.indexOf(p) === -1) {
-                  fields.push(p);
-                }
-              }
-
-              docs.push(d);
-            };
-
-            if (Array.isArray(data)) {
-              for (var i = 0; i < data.length; i++) {
-                pushDoc(data[i]);
-              }
-            } else {
-              pushDoc(data);
-            }
-
-            var df = new _grafana_data__WEBPACK_IMPORTED_MODULE_2__["MutableDataFrame"]({
-              fields: []
-            });
-
-            try {
-              for (var fields_1 = (e_2 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(fields)), fields_1_1 = fields_1.next(); !fields_1_1.done; fields_1_1 = fields_1.next()) {
-                var f = fields_1_1.value;
-                var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
-
-                if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
-                  t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
+                for (var p in d) {
+                  if (fields.indexOf(p) === -1) {
+                    fields.push(p);
+                  }
                 }
 
-                df.addField({
-                  name: f,
-                  type: t
-                }).parse = function (v) {
-                  return v || '';
+                docs.push(d);
+              };
+
+              if (Array.isArray(data)) {
+                for (var i = 0; i < data.length; i++) {
+                  pushDoc(data[i]);
+                }
+              } else {
+                pushDoc(data);
+              }
+
+              var df = new _grafana_data__WEBPACK_IMPORTED_MODULE_2__["MutableDataFrame"]({
+                fields: []
+              });
+
+              try {
+                for (var fields_1 = (e_2 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(fields)), fields_1_1 = fields_1.next(); !fields_1_1.done; fields_1_1 = fields_1.next()) {
+                  var f = fields_1_1.value;
+                  var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
+
+                  if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
+                    t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
+                  }
+
+                  df.addField({
+                    name: f,
+                    type: t
+                  }).parse = function (v) {
+                    return v || '';
+                  };
+                }
+              } catch (e_2_1) {
+                e_2 = {
+                  error: e_2_1
                 };
-              }
-            } catch (e_2_1) {
-              e_2 = {
-                error: e_2_1
-              };
-            } finally {
-              try {
-                if (fields_1_1 && !fields_1_1.done && (_a = fields_1["return"])) _a.call(fields_1);
               } finally {
-                if (e_2) throw e_2.error;
-              }
-            }
-
-            try {
-              for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
-                var doc = docs_1_1.value;
-
-                if ((_b = doc) === null || _b === void 0 ? void 0 : _b.Time) {
-                  doc.Time = doc.Time * 1000;
+                try {
+                  if (fields_1_1 && !fields_1_1.done && (_a = fields_1["return"])) _a.call(fields_1);
+                } finally {
+                  if (e_2) throw e_2.error;
                 }
-
-                df.add(doc);
               }
-            } catch (e_3_1) {
-              e_3 = {
-                error: e_3_1
+
+              try {
+                for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
+                  var doc = docs_1_1.value;
+
+                  if ((_b = doc) === null || _b === void 0 ? void 0 : _b.Time) {
+                    doc.Time = doc.Time * 1000;
+                  }
+
+                  df.add(doc);
+                }
+              } catch (e_3_1) {
+                e_3 = {
+                  error: e_3_1
+                };
+              } finally {
+                try {
+                  if (docs_1_1 && !docs_1_1.done && (_b = docs_1["return"])) _b.call(docs_1);
+                } finally {
+                  if (e_3) throw e_3.error;
+                }
+              }
+
+              dataFrame.push(df);
+            };
+
+            this_1 = this;
+
+            try {
+              for (results_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
+                res = results_1_1.value;
+
+                _loop_1(res);
+              }
+            } catch (e_1_1) {
+              e_1 = {
+                error: e_1_1
               };
             } finally {
               try {
-                if (docs_1_1 && !docs_1_1.done && (_b = docs_1["return"])) _b.call(docs_1);
+                if (results_1_1 && !results_1_1.done && (_c = results_1["return"])) _c.call(results_1);
               } finally {
-                if (e_3) throw e_3.error;
+                if (e_1) throw e_1.error;
               }
             }
 
-            dataFrame.push(df);
-          };
-
-          try {
-            for (var results_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
-              var res = results_1_1.value;
-
-              _loop_1(res);
-            }
-          } catch (e_1_1) {
-            e_1 = {
-              error: e_1_1
-            };
-          } finally {
-            try {
-              if (results_1_1 && !results_1_1.done && (_a = results_1["return"])) _a.call(results_1);
-            } finally {
-              if (e_1) throw e_1.error;
-            }
-          }
-
-          return {
-            data: dataFrame
-          };
-        })];
+            return [2
+            /*return*/
+            , {
+              data: dataFrame
+            }];
+        }
       });
     });
   };
 
   DataSource.prototype.testDatasource = function () {
-    var q = "{\n      __schema{\n        queryType{name}\n      }\n    }";
-    return this.postQuery(_types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"], q).then(function (res) {
-      if (res.errors) {
-        console.log(res.errors);
-        return {
-          status: 'error',
-          message: 'GraphQL Error: ' + res.errors[0].message
-        };
-      }
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
+      var q, err_2;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            q = "{\n      __schema{\n        queryType{name}\n      }\n    }";
+            _a.label = 1;
 
-      return {
-        status: 'success',
-        message: 'Success'
-      };
-    }, function (err) {
-      console.log(err);
-      return {
-        status: 'error',
-        message: 'HTTP Response ' + err.status + ': ' + err.statusText
-      };
+          case 1:
+            _a.trys.push([1, 3,, 4]);
+
+            return [4
+            /*yield*/
+            , this.postQuery(_types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"], q)];
+
+          case 2:
+            _a.sent();
+
+            return [2
+            /*return*/
+            , {
+              status: 'success',
+              message: 'Success'
+            }];
+
+          case 3:
+            err_2 = _a.sent();
+            console.log(err_2);
+            return [2
+            /*return*/
+            , {
+              status: 'error',
+              message: 'HTTP Response ' + err_2.status + ': ' + err_2.statusText
+            }];
+
+          case 4:
+            return [2
+            /*return*/
+            ];
+        }
+      });
     });
   };
 

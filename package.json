@@ -11,7 +11,9 @@
   "author": "Kevin Retzke",
   "license": "Apache-2.0",
   "devDependencies": {
+    "types-grafana": "^4.6.3",
     "@grafana/data": "^6.6.2",
+    "@grafana/runtime": "^6.6.2",
     "@grafana/toolkit": "^6.6.2",
     "@grafana/ui": "^6.6.2"
   },
