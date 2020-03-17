@@ -2222,8 +2222,6 @@ function (_super) {
         })).then(function (results) {
           var e_1, _a;
 
-          var _b;
-
           var dataFrame = [];
 
           var _loop_1 = function _loop_1(res) {
@@ -2237,14 +2235,24 @@ function (_super) {
 
             var pushDoc = function pushDoc(doc) {
               var d = Object(_util__WEBPACK_IMPORTED_MODULE_6__["flatten"])(doc);
+              var finalDoc = {};
+              Object.entries(d).forEach(function (_a) {
+                var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(_a, 2),
+                    key = _b[0],
+                    value = _b[1];
 
-              for (var p in d) {
+                var moddedKey = key.startsWith('node.') ? key.replace('node.', '') : key; // @ts-ignore
+
+                finalDoc[moddedKey] = value;
+              });
+
+              for (var p in finalDoc) {
                 if (fields.indexOf(p) === -1) {
                   fields.push(p);
                 }
               }
 
-              docs.push(d);
+              docs.push(finalDoc);
             };
 
             if (Array.isArray(data)) {
@@ -2293,12 +2301,8 @@ function (_super) {
               for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
                 var doc = docs_1_1.value;
 
-                if ((_b = doc) === null || _b === void 0 ? void 0 : _b['node.Time']) {
-                  doc['node.Time'] = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc['node.Time']);
-                }
-
                 if (doc.Time) {
-                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default()(doc.Time);
+                  doc.Time = moment__WEBPACK_IMPORTED_MODULE_5___default.a.unix(doc.Time);
                 }
 
                 df.add(doc);

@@ -79,13 +79,20 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         const docs: any[] = [];
         const fields: any[] = [];
         const pushDoc = (doc: object) => {
-          const d = flatten(doc);
-          for (const p in d) {
+          const d = flatten(doc) as object;
+          const finalDoc = {};
+          Object.entries(d).forEach(([key, value]) => {
+            const moddedKey = key.startsWith('node.') ? key.replace('node.', '') : key;
+            // @ts-ignore
+            finalDoc[moddedKey] = value;
+          });
+
+          for (const p in finalDoc) {
             if (fields.indexOf(p) === -1) {
               fields.push(p);
             }
           }
-          docs.push(d);
+          docs.push(finalDoc);
         };
         if (Array.isArray(data)) {
           for (let i = 0; i < data.length; i++) {
@@ -113,11 +120,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           };
         }
         for (const doc of docs) {
-          if (doc?.['node.Time']) {
-            doc['node.Time'] = moment.unix(doc['node.Time']);
-          }
           if (doc.Time) {
-            doc.Time = moment(doc.Time);
+            doc.Time = moment.unix(doc.Time);
           }
           df.add(doc);
         }
