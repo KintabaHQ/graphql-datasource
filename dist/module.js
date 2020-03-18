@@ -1,4 +1,4 @@
-define(["@grafana/data","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@grafana/data","@grafana/ui","lodash","moment","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_moment__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -2134,7 +2134,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./util.ts");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -2249,8 +2252,8 @@ function (_super) {
         return _this.flattenResults(r);
       });
 
-      if (flat.length === 1) {
-        return flat[0];
+      if (flat.length === 0) {
+        return flat;
       }
 
       if (Array.isArray(flat[0])) {
@@ -2301,17 +2304,17 @@ function (_super) {
   };
 
   DataSource.prototype.query = function (options) {
-    var _a, _b;
+    var _a, _b, _c;
 
     return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
       var results, dataFrame, _loop_1, this_1, results_1, results_1_1, res;
 
-      var e_1, _c;
+      var e_1, _d;
 
       var _this = this;
 
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_d) {
-        switch (_d.label) {
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_e) {
+        switch (_e.label) {
           case 0:
             return [4
             /*yield*/
@@ -2344,7 +2347,7 @@ function (_super) {
             }))];
 
           case 1:
-            results = _d.sent();
+            results = _e.sent();
             dataFrame = [];
 
             _loop_1 = function _loop_1(res) {
@@ -2389,7 +2392,9 @@ function (_super) {
                   var f = fields_1_1.value;
                   var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
 
-                  if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
+                  if (f === 'DateTime') {
+                    t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].time;
+                  } else if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
                     t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
                   }
 
@@ -2416,7 +2421,11 @@ function (_super) {
                 for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
                   var doc = docs_1_1.value;
 
-                  if ((_b = doc) === null || _b === void 0 ? void 0 : _b.Time) {
+                  if ((_b = doc) === null || _b === void 0 ? void 0 : _b.DateTime) {
+                    doc.DateTime = moment__WEBPACK_IMPORTED_MODULE_6___default.a.unix(doc.DateTime);
+                  }
+
+                  if ((_c = doc) === null || _c === void 0 ? void 0 : _c.Time) {
                     doc.Time = doc.Time * 1000;
                   }
 
@@ -2451,7 +2460,7 @@ function (_super) {
               };
             } finally {
               try {
-                if (results_1_1 && !results_1_1.done && (_c = results_1["return"])) _c.call(results_1);
+                if (results_1_1 && !results_1_1.done && (_d = results_1["return"])) _d.call(results_1);
               } finally {
                 if (e_1) throw e_1.error;
               }
@@ -2705,6 +2714,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
+
+/***/ }),
+
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_moment__;
 
 /***/ }),
 

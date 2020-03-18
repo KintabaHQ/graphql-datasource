@@ -8,6 +8,7 @@ import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 import { MutableDataFrame, FieldType, DataFrame } from '@grafana/data';
 import _ from 'lodash';
 import { flatten } from './util';
+import moment from 'moment';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   basicAuth: string | undefined;
@@ -63,8 +64,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     if (Array.isArray(results)) {
       // @ts-ignore
       const flat = results.map(r => this.flattenResults(r));
-      if (flat.length === 1) {
-        return flat[0];
+      if (flat.length === 0) {
+        return flat;
       }
       if (Array.isArray(flat[0])) {
         return flat.flat();
@@ -161,7 +162,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       });
       for (const f of fields) {
         let t: FieldType = FieldType.string;
-        if (_.isNumber(docs[0][f])) {
+        if (f === 'DateTime') {
+          t = FieldType.time;
+        } else if (_.isNumber(docs[0][f])) {
           t = FieldType.number;
         }
         df.addField({
@@ -172,6 +175,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         };
       }
       for (const doc of docs) {
+        if (doc?.DateTime) {
+          doc.DateTime = moment.unix(doc.DateTime);
+        }
         if (doc?.Time) {
           doc.Time = doc.Time * 1000;
         }
