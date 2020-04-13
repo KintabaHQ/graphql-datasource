@@ -1,13 +1,14 @@
 {
   "type": "datasource",
-  "name": "GraphQL Data Source",
-  "id": "fifemon-graphql-datasource",
+  "name": "Kintaba GraphQL Data Source",
+  "id": "kintaba-graphql-datasource",
   "metrics": true,
 
   "info": {
-    "description": "GraphQL Data Source",
+    "description": "Kintaba GraphQL Data Source",
     "author": {
-      "name": "Kevin Retzke"
+      "name": "Kintaba Inc.",
+      "url": "https://kintaba.com"
     },
     "keywords": ["GraphQL"],
     "logos": {
@@ -15,12 +16,12 @@
       "large": "img/logo.svg"
     },
     "links": [
-      { "name": "Website", "url": "https://github.com/fifemon/graphql-datasource" },
-      { "name": "License", "url": "https://github.com/fifemon/graphql-datasource/blob/master/LICENSE" }
+      { "name": "Website", "url": "https://github.com/vaultio/graphql-datasource" },
+      { "name": "License", "url": "https://github.com/vaultio/graphql-datasource/LICENSE" }
     ],
     "screenshots": [],
     "version": "1.0.0",
-    "updated": "2020-03-18"
+    "updated": "2020-04-13"
   },
 
   "dependencies": {

@@ -1,15 +1,19 @@
 {
   "name": "graphql-datasource",
   "version": "1.0.0",
-  "description": "Generic GraphQL data source",
+  "description": "Kintaba GraphQL Data Source",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "author": "Kevin Retzke",
+  "author": "Kintaba Inc.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Vaultio/graphql-datasource.git"
+  },
   "devDependencies": {
     "types-grafana": "^4.6.3",
     "@grafana/data": "^6.6.2",
