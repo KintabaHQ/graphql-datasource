@@ -1,4 +1,4 @@
-define(["@grafana/data","@grafana/ui","lodash","moment","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_moment__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@grafana/data","@grafana/runtime","@grafana/ui","lodash","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_lodash__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -1797,7 +1797,7 @@ module.exports = stubFalse;
 /*!******************************************!*\
   !*** ../node_modules/tslib/tslib.es6.js ***!
   \******************************************/
-/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault */
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1810,6 +1810,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
@@ -1822,19 +1823,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
@@ -1890,10 +1893,11 @@ function __metadata(metadataKey, metadataValue) {
 }
 
 function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 }
@@ -1926,19 +1930,25 @@ function __generator(thisArg, body) {
     }
 }
 
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
 function __exportStar(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 
 function __values(o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);
-    return {
+    if (o && typeof o.length === "number") return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 }
 
 function __read(o, n) {
@@ -2017,6 +2027,21 @@ function __importStar(mod) {
 
 function __importDefault(mod) {
     return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
 }
 
 
@@ -2131,12 +2156,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
 /* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./types */ "./types.ts");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "lodash");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./util.ts");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util */ "./util.ts");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
@@ -2152,11 +2177,10 @@ var DataSource =
 function (_super) {
   Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(DataSource, _super);
 
-  function DataSource(instanceSettings, backendSrv, templateSrv) {
+  function DataSource(instanceSettings, backendSrv) {
     var _this = _super.call(this, instanceSettings) || this;
 
     _this.backendSrv = backendSrv;
-    _this.templateSrv = templateSrv;
     _this.basicAuth = instanceSettings.basicAuth;
     _this.withCredentials = instanceSettings.withCredentials;
     _this.url = instanceSettings.url;
@@ -2164,90 +2188,68 @@ function (_super) {
   }
 
   DataSource.prototype.request = function (data) {
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
-      var options;
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            options = {
-              url: this.url,
-              method: 'POST',
-              data: {
-                query: data
-              }
-            };
+    var options = {
+      url: this.url,
+      method: 'POST',
+      data: {
+        query: data
+      }
+    };
 
-            if (this.basicAuth || this.withCredentials) {
-              options.withCredentials = true;
-            }
+    if (this.basicAuth || this.withCredentials) {
+      options.withCredentials = true;
+    }
 
-            if (this.basicAuth) {
-              options.headers = {
-                Authorization: this.basicAuth
-              };
-            }
+    if (this.basicAuth) {
+      options.headers = {
+        Authorization: this.basicAuth
+      };
+    }
 
-            return [4
-            /*yield*/
-            , this.backendSrv.datasourceRequest(options)];
-
-          case 1:
-            return [2
-            /*return*/
-            , _a.sent()];
-        }
-      });
-    });
+    return this.backendSrv.datasourceRequest(options);
   };
 
   DataSource.prototype.postQuery = function (query, payload) {
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
-      var results, err_1;
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            _a.trys.push([0, 2,, 3]);
+    return this.request(payload).then(function (results) {
+      return {
+        query: query,
+        results: results
+      };
+    })["catch"](function (err) {
+      if (err.data && err.data.error) {
+        throw {
+          message: 'GraphQL error: ' + err.data.error.reason,
+          error: err.data.error
+        };
+      }
 
-            return [4
-            /*yield*/
-            , this.request(payload)];
-
-          case 1:
-            results = _a.sent();
-            return [2
-            /*return*/
-            , {
-              query: query,
-              results: results
-            }];
-
-          case 2:
-            err_1 = _a.sent();
-
-            if (err_1.data && err_1.data.error) {
-              throw {
-                message: 'GraphQL error: ' + err_1.data.error.reason,
-                error: err_1.data.error
-              };
-            }
-
-            throw err_1;
-
-          case 3:
-            return [2
-            /*return*/
-            ];
-        }
-      });
+      throw err;
     });
-  }; // @ts-ignore
+  };
 
+  DataSource.prototype.createQuery = function (query, range, scopedVars) {
+    if (scopedVars === void 0) {
+      scopedVars = undefined;
+    }
 
-  DataSource.prototype.flattenResults = function (results) {
+    var payload = query.queryText;
+
+    if (range) {
+      payload = payload.replace(/\$timeFrom/g, range.from.valueOf().toString());
+      payload = payload.replace(/\$timeTo/g, range.to.valueOf().toString());
+      payload = payload.replace(/\$startTime/g, Math.round(range.from.valueOf() / 1000).toString());
+      payload = payload.replace(/\$endTime/g, Math.round(range.to.valueOf() / 1000).toString());
+    }
+
+    payload = Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_4__["getTemplateSrv"])().replace(payload, scopedVars); //console.log(payload);
+
+    return this.postQuery(query, payload);
+  };
+
+  DataSource.flattenResults = function (results) {
     var _this = this;
 
     if (Array.isArray(results)) {
-      // @ts-ignore
       var flat = results.map(function (r) {
         return _this.flattenResults(r);
       });
@@ -2303,226 +2305,482 @@ function (_super) {
     });
   };
 
+  DataSource.getDocs = function (resultsData, dataPath) {
+    var e_1, _a;
+
+    if (!resultsData) {
+      throw 'resultsData was null or undefined';
+    }
+
+    var raw = dataPath.split('.').reduce(function (d, p) {
+      if (!d) {
+        return null;
+      }
+
+      return d[p];
+    }, resultsData.data);
+    var data = DataSource.flattenResults(raw);
+
+    if (!data) {
+      var errors = resultsData.errors;
+
+      if (errors && errors.length !== 0) {
+        throw errors[0];
+      }
+
+      throw 'Your data path did not exist! dataPath: ' + dataPath;
+    }
+
+    if (resultsData.errors) {
+      // There can still be errors even if there is data
+      console.log('Got GraphQL errors:');
+      console.log(resultsData.errors);
+    }
+
+    var docs = [];
+
+    var pushDoc = function pushDoc(originalDoc) {
+      docs.push(Object(_util__WEBPACK_IMPORTED_MODULE_6__["flatten"])(originalDoc));
+    };
+
+    if (Array.isArray(data)) {
+      try {
+        for (var data_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
+          var element = data_1_1.value;
+          pushDoc(element);
+        }
+      } catch (e_1_1) {
+        e_1 = {
+          error: e_1_1
+        };
+      } finally {
+        try {
+          if (data_1_1 && !data_1_1.done && (_a = data_1["return"])) _a.call(data_1);
+        } finally {
+          if (e_1) throw e_1.error;
+        }
+      }
+    } else {
+      pushDoc(data);
+    }
+
+    return docs;
+  };
+
+  DataSource.getDataPathArray = function (dataPathString) {
+    var e_2, _a;
+
+    var dataPathArray = [];
+
+    try {
+      for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(dataPathString.split(',')), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var dataPath = _c.value;
+        var trimmed = dataPath.trim();
+
+        if (trimmed) {
+          dataPathArray.push(trimmed);
+        }
+      }
+    } catch (e_2_1) {
+      e_2 = {
+        error: e_2_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+      } finally {
+        if (e_2) throw e_2.error;
+      }
+    }
+
+    if (!dataPathArray) {
+      throw 'data path is empty!';
+    }
+
+    return dataPathArray;
+  };
+
   DataSource.prototype.query = function (options) {
-    var _a, _b, _c;
-
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
-      var results, dataFrame, _loop_1, this_1, results_1, results_1_1, res;
-
-      var e_1, _d;
-
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
       var _this = this;
 
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_e) {
-        switch (_e.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , Promise.all(options.targets.map(function (target) {
-              return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(_this, void 0, void 0, function () {
-                var query, payload;
-                return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
-                  switch (_a.label) {
-                    case 0:
-                      query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(target, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]);
-                      payload = query.queryText;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        return [2
+        /*return*/
+        , Promise.all(options.targets.map(function (target) {
+          return _this.createQuery(lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(target, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]), options.range, options.scopedVars);
+        })).then(function (results) {
+          var e_3, _a, e_4, _b, e_5, _c, e_6, _d, e_7, _e, e_8, _f;
 
-                      if (options.range) {
-                        payload = payload.replace(/\$startTime/g, options.range.from.unix().toString());
-                        payload = payload.replace(/\$endTime/g, options.range.to.unix().toString());
+          var dataFrameArray = [];
+
+          try {
+            for (var results_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
+              var res = results_1_1.value;
+              var dataPathArray = DataSource.getDataPathArray(res.query.dataPath);
+              var _g = res.query,
+                  groupBy = _g.groupBy,
+                  aliasBy = _g.aliasBy;
+              var split = groupBy.split(',');
+              var groupByList = [];
+
+              try {
+                for (var split_1 = (e_4 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(split)), split_1_1 = split_1.next(); !split_1_1.done; split_1_1 = split_1.next()) {
+                  var element = split_1_1.value;
+                  var trimmed = element.trim();
+
+                  if (trimmed) {
+                    groupByList.push(trimmed);
+                  }
+                }
+              } catch (e_4_1) {
+                e_4 = {
+                  error: e_4_1
+                };
+              } finally {
+                try {
+                  if (split_1_1 && !split_1_1.done && (_b = split_1["return"])) _b.call(split_1);
+                } finally {
+                  if (e_4) throw e_4.error;
+                }
+              }
+
+              try {
+                for (var dataPathArray_1 = (e_5 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(dataPathArray)), dataPathArray_1_1 = dataPathArray_1.next(); !dataPathArray_1_1.done; dataPathArray_1_1 = dataPathArray_1.next()) {
+                  var dataPath = dataPathArray_1_1.value;
+                  var docs = DataSource.getDocs(res.results.data, dataPath);
+                  var dataFrameMap = new Map();
+
+                  try {
+                    for (var docs_1 = (e_6 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
+                      var doc = docs_1_1.value;
+
+                      if (doc.Time) {
+                        if (typeof doc.Time === 'number') {
+                          var maybeTime = Object(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["dateTime"])(doc.Time * 1000);
+
+                          if (maybeTime.toDate().getFullYear() > 3000) {
+                            doc.Time = Object(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["dateTime"])(doc.Time);
+                          } else {
+                            doc.Time = maybeTime;
+                          }
+                        } else {
+                          doc.Time = Object(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["dateTime"])(doc.Time);
+                        }
                       }
 
-                      payload = this.templateSrv.replace(payload, options.scopedVars);
-                      return [4
-                      /*yield*/
-                      , this.postQuery(query, payload)];
+                      var identifiers = [];
 
-                    case 1:
-                      return [2
-                      /*return*/
-                      , _a.sent()];
+                      try {
+                        for (var groupByList_1 = (e_7 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(groupByList)), groupByList_1_1 = groupByList_1.next(); !groupByList_1_1.done; groupByList_1_1 = groupByList_1.next()) {
+                          var groupByElement = groupByList_1_1.value;
+                          identifiers.push(doc[groupByElement]);
+                        }
+                      } catch (e_7_1) {
+                        e_7 = {
+                          error: e_7_1
+                        };
+                      } finally {
+                        try {
+                          if (groupByList_1_1 && !groupByList_1_1.done && (_e = groupByList_1["return"])) _e.call(groupByList_1);
+                        } finally {
+                          if (e_7) throw e_7.error;
+                        }
+                      }
+
+                      var identifiersString = identifiers.toString();
+                      var dataFrame = dataFrameMap.get(identifiersString);
+
+                      if (!dataFrame) {
+                        // we haven't initialized the dataFrame for this specific identifier that we group by yet
+                        dataFrame = new _grafana_data__WEBPACK_IMPORTED_MODULE_2__["MutableDataFrame"]({
+                          fields: []
+                        });
+                        var generalReplaceObject = {};
+
+                        for (var fieldName in doc) {
+                          generalReplaceObject['field_' + fieldName] = doc[fieldName];
+                        }
+
+                        for (var fieldName in doc) {
+                          var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
+
+                          if (fieldName === 'Time') {
+                            t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].time;
+                          } else if (lodash__WEBPACK_IMPORTED_MODULE_5___default.a.isNumber(doc[fieldName])) {
+                            t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
+                          }
+
+                          var title = void 0;
+
+                          if (identifiers.length !== 0) {
+                            // if we have any identifiers
+                            title = identifiersString + '_' + fieldName;
+                          } else {
+                            title = fieldName;
+                          }
+
+                          if (aliasBy) {
+                            title = aliasBy;
+
+                            var replaceObject = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, generalReplaceObject);
+
+                            replaceObject['fieldName'] = fieldName;
+
+                            for (var replaceKey in replaceObject) {
+                              var replaceValue = replaceObject[replaceKey];
+                              var regex = new RegExp('\\$' + replaceKey, 'g');
+                              title = title.replace(regex, replaceValue);
+                            }
+
+                            title = Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_4__["getTemplateSrv"])().replace(title, options.scopedVars);
+                          }
+
+                          dataFrame.addField({
+                            name: fieldName,
+                            type: t,
+                            config: {
+                              displayName: title
+                            }
+                          }).parse = function (v) {
+                            return v || '';
+                          };
+                        }
+
+                        dataFrameMap.set(identifiersString, dataFrame);
+                      }
+
+                      dataFrame.add(doc);
+                    }
+                  } catch (e_6_1) {
+                    e_6 = {
+                      error: e_6_1
+                    };
+                  } finally {
+                    try {
+                      if (docs_1_1 && !docs_1_1.done && (_d = docs_1["return"])) _d.call(docs_1);
+                    } finally {
+                      if (e_6) throw e_6.error;
+                    }
                   }
-                });
-              });
-            }))];
 
-          case 1:
-            results = _e.sent();
-            dataFrame = [];
-
-            _loop_1 = function _loop_1(res) {
-              var e_2, _a, e_3, _b;
-
-              var raw = (_a = res.query.dataPath) === null || _a === void 0 ? void 0 : _a.split('.').reduce(function (d, p) {
-                return d[p];
-              }, res.results.data);
-              var data = this_1.flattenResults(raw);
-              var docs = [];
-              var fields = [];
-
-              var pushDoc = function pushDoc(doc) {
-                var _a; // @ts-ignore
-
-
-                var d = ((_a = doc) === null || _a === void 0 ? void 0 : _a['node']) ? Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc['node']) : Object(_util__WEBPACK_IMPORTED_MODULE_5__["flatten"])(doc);
-
-                for (var p in d) {
-                  if (fields.indexOf(p) === -1) {
-                    fields.push(p);
+                  try {
+                    for (var _h = (e_8 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(dataFrameMap.values())), _j = _h.next(); !_j.done; _j = _h.next()) {
+                      var dataFrame = _j.value;
+                      dataFrameArray.push(dataFrame);
+                    }
+                  } catch (e_8_1) {
+                    e_8 = {
+                      error: e_8_1
+                    };
+                  } finally {
+                    try {
+                      if (_j && !_j.done && (_f = _h["return"])) _f.call(_h);
+                    } finally {
+                      if (e_8) throw e_8.error;
+                    }
                   }
                 }
-
-                docs.push(d);
-              };
-
-              if (Array.isArray(data)) {
-                for (var i = 0; i < data.length; i++) {
-                  pushDoc(data[i]);
-                }
-              } else {
-                pushDoc(data);
-              }
-
-              var df = new _grafana_data__WEBPACK_IMPORTED_MODULE_2__["MutableDataFrame"]({
-                fields: []
-              });
-
-              try {
-                for (var fields_1 = (e_2 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(fields)), fields_1_1 = fields_1.next(); !fields_1_1.done; fields_1_1 = fields_1.next()) {
-                  var f = fields_1_1.value;
-                  var t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].string;
-
-                  if (f === 'DateTime') {
-                    t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].time;
-                  } else if (lodash__WEBPACK_IMPORTED_MODULE_4___default.a.isNumber(docs[0][f])) {
-                    t = _grafana_data__WEBPACK_IMPORTED_MODULE_2__["FieldType"].number;
-                  }
-
-                  df.addField({
-                    name: f,
-                    type: t
-                  }).parse = function (v) {
-                    return v || '';
-                  };
-                }
-              } catch (e_2_1) {
-                e_2 = {
-                  error: e_2_1
+              } catch (e_5_1) {
+                e_5 = {
+                  error: e_5_1
                 };
               } finally {
                 try {
-                  if (fields_1_1 && !fields_1_1.done && (_a = fields_1["return"])) _a.call(fields_1);
+                  if (dataPathArray_1_1 && !dataPathArray_1_1.done && (_c = dataPathArray_1["return"])) _c.call(dataPathArray_1);
                 } finally {
-                  if (e_2) throw e_2.error;
+                  if (e_5) throw e_5.error;
                 }
-              }
-
-              try {
-                for (var docs_1 = (e_3 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_1_1 = docs_1.next(); !docs_1_1.done; docs_1_1 = docs_1.next()) {
-                  var doc = docs_1_1.value;
-
-                  if ((_b = doc) === null || _b === void 0 ? void 0 : _b.DateTime) {
-                    doc.DateTime = moment__WEBPACK_IMPORTED_MODULE_6___default.a.unix(doc.DateTime);
-                  }
-
-                  if ((_c = doc) === null || _c === void 0 ? void 0 : _c.Time) {
-                    doc.Time = doc.Time * 1000;
-                  }
-
-                  df.add(doc);
-                }
-              } catch (e_3_1) {
-                e_3 = {
-                  error: e_3_1
-                };
-              } finally {
-                try {
-                  if (docs_1_1 && !docs_1_1.done && (_b = docs_1["return"])) _b.call(docs_1);
-                } finally {
-                  if (e_3) throw e_3.error;
-                }
-              }
-
-              dataFrame.push(df);
-            };
-
-            this_1 = this;
-
-            try {
-              for (results_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
-                res = results_1_1.value;
-
-                _loop_1(res);
-              }
-            } catch (e_1_1) {
-              e_1 = {
-                error: e_1_1
-              };
-            } finally {
-              try {
-                if (results_1_1 && !results_1_1.done && (_d = results_1["return"])) _d.call(results_1);
-              } finally {
-                if (e_1) throw e_1.error;
               }
             }
+          } catch (e_3_1) {
+            e_3 = {
+              error: e_3_1
+            };
+          } finally {
+            try {
+              if (results_1_1 && !results_1_1.done && (_a = results_1["return"])) _a.call(results_1);
+            } finally {
+              if (e_3) throw e_3.error;
+            }
+          }
 
-            return [2
-            /*return*/
-            , {
-              data: dataFrame
-            }];
-        }
+          return {
+            data: dataFrameArray
+          };
+        })];
+      });
+    });
+  };
+
+  DataSource.prototype.annotationQuery = function (options) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, Promise, function () {
+      var query;
+      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
+        query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(options.annotation, _types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"]);
+        return [2
+        /*return*/
+        , Promise.all([this.createQuery(query, options.range)]).then(function (results) {
+          var e_9, _a, e_10, _b, e_11, _c, e_12, _d;
+
+          var r = [];
+
+          try {
+            for (var results_2 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(results), results_2_1 = results_2.next(); !results_2_1.done; results_2_1 = results_2.next()) {
+              var res = results_2_1.value;
+              var dataPathArray = DataSource.getDataPathArray(res.query.dataPath);
+
+              try {
+                for (var dataPathArray_2 = (e_10 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(dataPathArray)), dataPathArray_2_1 = dataPathArray_2.next(); !dataPathArray_2_1.done; dataPathArray_2_1 = dataPathArray_2.next()) {
+                  var dataPath = dataPathArray_2_1.value;
+                  var docs = DataSource.getDocs(res.results.data, dataPath);
+
+                  try {
+                    for (var docs_2 = (e_11 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(docs)), docs_2_1 = docs_2.next(); !docs_2_1.done; docs_2_1 = docs_2.next()) {
+                      var doc = docs_2_1.value;
+                      var annotation = {};
+
+                      if (doc.Time) {
+                        annotation.time = Object(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["dateTime"])(doc.Time).valueOf();
+                      }
+
+                      if (doc.TimeEnd) {
+                        annotation.isRegion = true;
+                        annotation.timeEnd = Object(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["dateTime"])(doc.TimeEnd).valueOf();
+                      }
+
+                      var title = query.annotationTitle;
+                      var text = query.annotationText;
+                      var tags = query.annotationTags;
+
+                      for (var fieldName in doc) {
+                        var fieldValue = doc[fieldName];
+                        var replaceKey = 'field_' + fieldName;
+                        var regex = new RegExp('\\$' + replaceKey, 'g');
+                        title = title.replace(regex, fieldValue);
+                        text = text.replace(regex, fieldValue);
+                        tags = tags.replace(regex, fieldValue);
+                      }
+
+                      annotation.title = title;
+                      annotation.text = text;
+                      var tagsList = [];
+
+                      try {
+                        for (var _e = (e_12 = void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(tags.split(','))), _f = _e.next(); !_f.done; _f = _e.next()) {
+                          var element = _f.value;
+                          var trimmed = element.trim();
+
+                          if (trimmed) {
+                            tagsList.push(trimmed);
+                          }
+                        }
+                      } catch (e_12_1) {
+                        e_12 = {
+                          error: e_12_1
+                        };
+                      } finally {
+                        try {
+                          if (_f && !_f.done && (_d = _e["return"])) _d.call(_e);
+                        } finally {
+                          if (e_12) throw e_12.error;
+                        }
+                      }
+
+                      annotation.tags = tagsList;
+                      r.push(annotation);
+                    }
+                  } catch (e_11_1) {
+                    e_11 = {
+                      error: e_11_1
+                    };
+                  } finally {
+                    try {
+                      if (docs_2_1 && !docs_2_1.done && (_c = docs_2["return"])) _c.call(docs_2);
+                    } finally {
+                      if (e_11) throw e_11.error;
+                    }
+                  }
+                }
+              } catch (e_10_1) {
+                e_10 = {
+                  error: e_10_1
+                };
+              } finally {
+                try {
+                  if (dataPathArray_2_1 && !dataPathArray_2_1.done && (_b = dataPathArray_2["return"])) _b.call(dataPathArray_2);
+                } finally {
+                  if (e_10) throw e_10.error;
+                }
+              }
+            }
+          } catch (e_9_1) {
+            e_9 = {
+              error: e_9_1
+            };
+          } finally {
+            try {
+              if (results_2_1 && !results_2_1.done && (_a = results_2["return"])) _a.call(results_2);
+            } finally {
+              if (e_9) throw e_9.error;
+            }
+          }
+
+          return r;
+        })];
       });
     });
   };
 
   DataSource.prototype.testDatasource = function () {
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function () {
-      var q, err_2;
-      return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"])(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            q = "{\n      __schema{\n        queryType{name}\n      }\n    }";
-            _a.label = 1;
+    var q = "{\n      __schema{\n        queryType{name}\n      }\n    }";
+    return this.postQuery(_types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"], q).then(function (res) {
+      if (res.errors) {
+        console.log(res.errors);
+        return {
+          status: 'error',
+          message: 'GraphQL Error: ' + res.errors[0].message
+        };
+      }
 
-          case 1:
-            _a.trys.push([1, 3,, 4]);
-
-            return [4
-            /*yield*/
-            , this.postQuery(_types__WEBPACK_IMPORTED_MODULE_3__["defaultQuery"], q)];
-
-          case 2:
-            _a.sent();
-
-            return [2
-            /*return*/
-            , {
-              status: 'success',
-              message: 'Success'
-            }];
-
-          case 3:
-            err_2 = _a.sent();
-            console.log(err_2);
-            return [2
-            /*return*/
-            , {
-              status: 'error',
-              message: 'HTTP Response ' + err_2.status + ': ' + err_2.statusText
-            }];
-
-          case 4:
-            return [2
-            /*return*/
-            ];
-        }
-      });
+      return {
+        status: 'success',
+        message: 'Success'
+      };
+    }, function (err) {
+      console.log(err);
+      return {
+        status: 'error',
+        message: 'HTTP Response ' + err.status + ': ' + err.statusText
+      };
     });
   };
 
   return DataSource;
 }(_grafana_data__WEBPACK_IMPORTED_MODULE_2__["DataSourceApi"]);
+
+
+
+/***/ }),
+
+/***/ "./GraphQLAnnotationsQueryCtrl.tsx":
+/*!*****************************************!*\
+  !*** ./GraphQLAnnotationsQueryCtrl.tsx ***!
+  \*****************************************/
+/*! exports provided: GraphQLAnnotationsQueryCtrl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphQLAnnotationsQueryCtrl", function() { return GraphQLAnnotationsQueryCtrl; });
+var GraphQLAnnotationsQueryCtrl =
+/** @class */
+function () {
+  function GraphQLAnnotationsQueryCtrl() {}
+
+  GraphQLAnnotationsQueryCtrl.templateUrl = 'partials/annotations.editor.html';
+  return GraphQLAnnotationsQueryCtrl;
+}();
 
 
 
@@ -2578,6 +2836,24 @@ function (_super) {
       }));
     };
 
+    _this.onGroupByTextChange = function (event) {
+      var _a = _this.props,
+          onChange = _a.onChange,
+          query = _a.query;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query), {
+        groupBy: event.target.value
+      }));
+    };
+
+    _this.onAliasByTextChange = function (event) {
+      var _a = _this.props,
+          onChange = _a.onChange,
+          query = _a.query;
+      onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, query), {
+        aliasBy: event.target.value
+      }));
+    };
+
     return _this;
   }
 
@@ -2586,7 +2862,9 @@ function (_super) {
   QueryEditor.prototype.render = function () {
     var query = lodash_defaults__WEBPACK_IMPORTED_MODULE_1___default()(this.props.query, _types__WEBPACK_IMPORTED_MODULE_4__["defaultQuery"]);
     var queryText = query.queryText,
-        dataPath = query.dataPath;
+        dataPath = query.dataPath,
+        groupBy = query.groupBy,
+        aliasBy = query.aliasBy;
     return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("textarea", {
       value: queryText || '',
       onChange: this.onQueryTextChange,
@@ -2594,12 +2872,31 @@ function (_super) {
       rows: 10
     }), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
       className: "gf-form"
-    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["FormField"], {
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["LegacyForms"].FormField, {
       labelWidth: 8,
+      inputWidth: 24,
       value: dataPath || '',
       onChange: this.onDataPathTextChange,
       label: "Data path",
-      tooltip: "dot-delimted path to data in response"
+      tooltip: "dot-delimited path to data in response. Separate with commas to use multiple data paths"
+    })), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["LegacyForms"].FormField, {
+      labelWidth: 8,
+      inputWidth: 24,
+      value: groupBy || '',
+      onChange: this.onGroupByTextChange,
+      label: "Group by",
+      tooltip: "dot-delimited path for the key to use. Separate with commas to use multiple fields to group by"
+    })), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: 'gf-form'
+    }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_3__["LegacyForms"].FormField, {
+      labelWidth: 8,
+      inputWidth: 24,
+      value: aliasBy || '',
+      onChange: this.onAliasByTextChange,
+      label: "Alias by",
+      tooltip: "The formattable text to alias by. Use $field_<field name> to replace with the value of a field, or $fieldName to replace with the name of the field"
     })));
   };
 
@@ -2625,11 +2922,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DataSource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DataSource */ "./DataSource.ts");
 /* harmony import */ var _ConfigEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ConfigEditor */ "./ConfigEditor.tsx");
 /* harmony import */ var _QueryEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./QueryEditor */ "./QueryEditor.tsx");
+/* harmony import */ var _GraphQLAnnotationsQueryCtrl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GraphQLAnnotationsQueryCtrl */ "./GraphQLAnnotationsQueryCtrl.tsx");
 
 
 
 
-var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setQueryEditor(_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
+
+var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["DataSourcePlugin"](_DataSource__WEBPACK_IMPORTED_MODULE_1__["DataSource"]).setConfigEditor(_ConfigEditor__WEBPACK_IMPORTED_MODULE_2__["ConfigEditor"]).setAnnotationQueryCtrl(_GraphQLAnnotationsQueryCtrl__WEBPACK_IMPORTED_MODULE_4__["GraphQLAnnotationsQueryCtrl"]).setQueryEditor(_QueryEditor__WEBPACK_IMPORTED_MODULE_3__["QueryEditor"]);
 
 /***/ }),
 
@@ -2645,7 +2944,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultQuery", function() { return defaultQuery; });
 var defaultQuery = {
   queryText: "query {\n      data:submissions(user:\"$user\"){\n          Time:submitTime\n          idle running completed\n      }\n}",
-  dataPath: 'data.data',
+  dataPath: 'data',
+  groupBy: '',
+  aliasBy: '',
+  annotationTitle: '',
+  annotationText: '',
+  annotationTags: '',
   constant: 6.5
 };
 
@@ -2662,7 +2966,7 @@ var defaultQuery = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flatten", function() { return flatten; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 function flatten(object, path, separator) {
@@ -2677,8 +2981,9 @@ function flatten(object, path, separator) {
   return Object.keys(object).reduce(function (acc, key) {
     var _a;
 
+    var isObject = _typeof(object[key]) === 'object' && object[key] != null;
     var newPath = [path, key].filter(Boolean).join(separator);
-    return _typeof(object[key]) === 'object' ? Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, acc), flatten(object[key], newPath, separator)) : Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, acc), (_a = {}, _a[newPath] = object[key], _a));
+    return isObject ? Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, acc), flatten(object[key], newPath, separator)) : Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, acc), (_a = {}, _a[newPath] = object[key], _a));
   }, {});
 }
 
@@ -2692,6 +2997,17 @@ function flatten(object, path, separator) {
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_data__;
+
+/***/ }),
+
+/***/ "@grafana/runtime":
+/*!***********************************!*\
+  !*** external "@grafana/runtime" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_runtime__;
 
 /***/ }),
 
@@ -2714,17 +3030,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_lodash__;
-
-/***/ }),
-
-/***/ "moment":
-/*!*************************!*\
-  !*** external "moment" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_moment__;
 
 /***/ }),
 
