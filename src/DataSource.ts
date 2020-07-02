@@ -219,6 +219,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
                 doc.Time = dateTime(doc.Time);
               }
             }
+            if (doc.Duration) {
+              doc.Duration = doc.Duration * 1000;
+            }
             const identifiers: string[] = [];
             for (const groupByElement of groupByList) {
               identifiers.push(doc[groupByElement]);

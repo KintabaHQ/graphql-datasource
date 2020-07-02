@@ -2469,6 +2469,10 @@ function (_super) {
                         }
                       }
 
+                      if (doc.Duration) {
+                        doc.Duration = doc.Duration * 1000;
+                      }
+
                       var identifiers = [];
 
                       try {
