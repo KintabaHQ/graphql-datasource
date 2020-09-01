@@ -25,3 +25,10 @@ work/
 ci/
 e2e-results/
 
+.circleci/*
+jest.config.js
+src
+.prettier.js
+yarn.lock
+appveyor.yml
+tsconfig.json
